@@ -21,6 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/view',[CurdController::class,'vieww']);
 Route::post('posted',[CurdController::class,'posted']);
 Route::delete('delete/{curd_id}',[CurdController::class,'deleteData']);
-
-Route::get('edit/{id}', [CurdController::class,'update']);
-Route::post('edit-store', [CurdController::class,'editStore']);
+Route::get('/view/{id}',[CurdController::class,'show']);
+// Route::get('/edit/{id}', [CurdController::class,'editStore']);
+Route::put('/edit/{id}', [CurdController::class,'editStore']);

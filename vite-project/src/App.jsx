@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+// import { Link, Route, Routes } from "react-router-dom";
+// import Edit from "./pages/edit";
 
 function App() {
-  const [userField, setUserField] = useState({ name: "", email: "", phone: "" });
+  const [userField, setUserField] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState([]);
 
@@ -21,7 +28,7 @@ function App() {
       fetchUser();
       setUserField({ name: "", email: "", phone: "" });
     } catch (err) {
-      console.log("Something went wrong");
+      console.log("Something went wrong", err);
     }
     setLoading(false);
   };
@@ -35,20 +42,22 @@ function App() {
       const result = await axios.get("http://127.0.0.1:8000/api/view");
       setUser(result.data.results);
     } catch (err) {
-      console.log("Error fetching users");
+      console.log("Error fetching users", err);
     }
   };
 
   // Handle delete
   const handleDelete = async (id) => {
     try {
-      await axios.delete("http://127.0.0.1:8000/api/delete/"+id);
+      await axios.delete("http://127.0.0.1:8000/api/delete/" + id);
       const newUserData = user.filter((item) => item.id !== id);
       setUser(newUserData);
     } catch (err) {
-      console.log("Error deleting user");
+      console.log("Error deleting user", err);
     }
   };
+
+  // Edit
 
   return (
     <div className="min-h-screen bg-gray-100 flex py-10">
@@ -70,7 +79,9 @@ function App() {
             />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -81,7 +92,9 @@ function App() {
             />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Phone</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Phone
+            </label>
             <input
               type="text"
               name="phone"
@@ -120,24 +133,35 @@ function App() {
             <tbody>
               {user.length > 0 ? (
                 user.map((user, i) => (
-                  <tr key={i} className="text-center odd:bg-gray-100 even:bg-white hover:bg-gray-200 transition">
-                    <td className="border border-gray-300 px-4 py-3">{i + 1}</td>
-                    <td className="border border-gray-300 px-4 py-3">{user.name}</td>
-                    <td className="border border-gray-300 px-4 py-3">{user.email}</td>
-                    <td className="border border-gray-300 px-4 py-3">{user.phone}</td>
+                  <tr
+                    key={i}
+                    className="text-center odd:bg-gray-100 even:bg-white hover:bg-gray-200 transition"
+                  >
+                    <td className="border border-gray-300 px-4 py-3">
+                      {i + 1}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-3">
+                      {user.name}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-3">
+                      {user.email}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-3">
+                      {user.phone}
+                    </td>
                     <td className="border border-gray-300 px-4 py-3">
                       <button
                         onClick={() => handleDelete(user.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded-lg font-medium hover:bg-red-300 transition"
+                        className="bg-red-500 text-red-500 px-3 py-1 rounded-lg font-medium hover:bg-red-300 transition"
                       >
-                        <i class="fa-solid fa-trash"></i>
+                        <i className="fa-solid fa-trash"></i>
                       </button>
-                      <button
-                       
-                        className="ms-4 bg-green-500 text-white px-3 py-1 rounded-lg font-medium hover:bg-yellow-600 transition"
+                      <Link
+                        to={`/edit/${user.id}`}
+                        className="bg-green-500 text-white px-3 py-1 rounded-lg font-medium hover:bg-yellow-600 transition"
                       >
-                        <i class="fa-solid fa-pen-to-square"></i>
-                      </button>
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </Link>
                     </td>
                   </tr>
                 ))
@@ -152,6 +176,9 @@ function App() {
           </table>
         </div>
       </div>
+      {/* <Routes>
+        <Route path="/edit" element={<Edit />} />
+      </Routes> */}
     </div>
   );
 }

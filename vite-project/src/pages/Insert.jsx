@@ -1,4 +1,6 @@
-import React from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+// import React, { useState } from 'react';
 
 const Insert = () => {
     const [userField, setUserField] = useState({ name: "", email: "", phone: "" });
